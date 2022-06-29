@@ -322,6 +322,8 @@ bool IEC104::m_asduReceivedHandler(void *parameter, int address, CS101_ASDU asdu
             Logger::getLogger()->error("Type of message not supported");
             return false;
     }
+    Logger::getLogger()->info("datapoints size: %d",datapoints.size());
+    
     if (!datapoints.empty())
         mclient->sendData(asdu, datapoints, label);
 
@@ -617,7 +619,7 @@ std::string IEC104::m_checkExchangedDataLayer(unsigned int ca, const string& typ
 {
 	bool known_ca = false, known_type_id = false;
 	
-	//Logger::getLogger()->warn("Checking " + to_string(ca) + " " + type_id + " " + to_string(ioa));
+	Logger::getLogger()->warn("Checking " + to_string(ca) + " " + type_id + " " + to_string(ioa));
 	for (auto& element : m_msg_configuration["asdu_list"])
 	{
 		if (m_getConfigValue<unsigned int>(element, "/ca"_json_pointer) == ca)
@@ -688,7 +690,14 @@ int IEC104::m_watchdog(int delay, int checkRes, bool *flag, std::string id)
 
 void IEC104Client::sendData(CS101_ASDU asdu, vector<Datapoint*> datapoints, const std::string& dataName)
 {
-    auto* data_header = new vector<Datapoint*>;
+
+
+   
+    // We send as many pivot format objects as information objects in the source ASDU
+    
+    for (Datapoint* item_dp : datapoints)
+    {
+         auto* data_header = new vector<Datapoint*>;
 
     for (auto& feature : (*m_pivot_configuration)["mapping"]["data_object_header"].items())
     {
@@ -705,15 +714,19 @@ void IEC104Client::sendData(CS101_ASDU asdu, vector<Datapoint*> datapoints, cons
         else if (feature.value() == "isnegative")
             data_header->push_back(m_createDatapoint(feature.key(), (long) CS101_ASDU_isNegative(asdu)));
     }
-
     DatapointValue header_dpv(data_header, true);
-
     auto* header_dp = new Datapoint("data_object_header", header_dpv);
-
-    // We send as many pivot format objects as information objects in the source ASDU
-    for (Datapoint* item_dp : datapoints)
-    {
-        Reading reading(dataName, {header_dp, item_dp});
+        std::string name = item_dp->getName();
+        item_dp->setName("data_object_item");
+        Reading reading(name, {header_dp, item_dp});
+        Logger::getLogger()->warn("1111");
+        Logger::getLogger()->warn(dataName);
+        Logger::getLogger()->warn(header_dp->toJSONProperty());
+        Logger::getLogger()->warn(item_dp->toJSONProperty());
+        Logger::getLogger()->warn(reading.toJSON());
+        Logger::getLogger()->warn(reading.getDatapointsJSON());
+        Logger::getLogger()->warn(reading.getAssetName());
+       
         m_iec104->ingest(reading);
     }
 }
@@ -725,6 +738,7 @@ void IEC104Client::m_addData(vector<Datapoint*>& datapoints, long ioa,
                              QualityDescriptor qd, CP56Time2a ts)
 {
     auto* measure_features = new vector<Datapoint*>;
+    measure_features->push_back(m_createDatapoint("assetName", dataname));
 
     for (auto& feature : (*m_pivot_configuration)["mapping"]["data_object_item"].items())
     {
@@ -754,7 +768,8 @@ void IEC104Client::m_addData(vector<Datapoint*>& datapoints, long ioa,
 
     DatapointValue dpv(measure_features, true);
 
-    datapoints.push_back(new Datapoint("data_object_item", dpv));
+    datapoints.push_back(new Datapoint(dataname, dpv));
+    // datapoints.push_back(new Datapoint("data_object_item", dpv));
 }
 
 /**
