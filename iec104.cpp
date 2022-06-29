@@ -15,6 +15,7 @@
 #include <iostream>
 #include <cmath>
 #include <utility>
+#include <string>
 
 
 using namespace std;
@@ -91,7 +92,8 @@ bool IEC104::m_asduReceivedHandler(void *parameter, int address, CS101_ASDU asdu
             for (int i = 0; i < CS101_ASDU_getNumberOfElements(asdu); i++) {
                 InformationObject io = CS101_ASDU_getElement(asdu, i);
                 long ioa = InformationObject_getObjectAddress(io);
-                if (!(label = IEC104::m_checkExchangedDataLayer(ca, "M_ME_NB_1", ioa)).empty()) {
+                label = IEC104::m_checkExchangedDataLayer(ca, "M_ME_NB_1", ioa);
+                if (!label.empty()) {
                     auto io_casted = (MeasuredValueScaled) io;
                     long int value = MeasuredValueScaled_getValue((MeasuredValueScaled) io_casted);
                     QualityDescriptor qd = MeasuredValueScaled_getQuality(io_casted);
@@ -106,7 +108,8 @@ bool IEC104::m_asduReceivedHandler(void *parameter, int address, CS101_ASDU asdu
             for (int i = 0; i < CS101_ASDU_getNumberOfElements(asdu); i++) {
                 InformationObject io = CS101_ASDU_getElement(asdu, i);
                 long ioa = InformationObject_getObjectAddress(io);
-                if (!(label = IEC104::m_checkExchangedDataLayer(ca, "M_SP_NA_1", ioa)).empty()) {
+                label = IEC104::m_checkExchangedDataLayer(ca, "M_SP_NA_1", ioa);
+                if (!label.empty()) {
                     auto io_casted = (SinglePointInformation) io;
                     long int value = SinglePointInformation_getValue((SinglePointInformation) io_casted);
                     QualityDescriptor qd = SinglePointInformation_getQuality((SinglePointInformation) io_casted);
@@ -121,7 +124,8 @@ bool IEC104::m_asduReceivedHandler(void *parameter, int address, CS101_ASDU asdu
             for (int i = 0; i < CS101_ASDU_getNumberOfElements(asdu); i++) {
                 InformationObject io = CS101_ASDU_getElement(asdu, i);
                 long ioa = InformationObject_getObjectAddress(io);
-                if (!(label = IEC104::m_checkExchangedDataLayer(ca, "M_SP_TB_1", ioa)).empty()) {
+                label = IEC104::m_checkExchangedDataLayer(ca, "M_SP_TB_1", ioa);
+                if (!label.empty()) {
                     auto io_casted = (SinglePointWithCP56Time2a) io;
                     long int value = SinglePointInformation_getValue((SinglePointInformation) io_casted);
                     QualityDescriptor qd = SinglePointInformation_getQuality((SinglePointInformation) io_casted);
@@ -142,7 +146,8 @@ bool IEC104::m_asduReceivedHandler(void *parameter, int address, CS101_ASDU asdu
             for (int i = 0; i < CS101_ASDU_getNumberOfElements(asdu); i++) {
                 InformationObject io = CS101_ASDU_getElement(asdu, i);
                 long ioa = InformationObject_getObjectAddress(io);
-                if (!(label = IEC104::m_checkExchangedDataLayer(ca, "M_DP_NA_1", ioa)).empty()) {
+                label = IEC104::m_checkExchangedDataLayer(ca, "M_DP_NA_1", ioa);
+                if (!label.empty()) {
                     auto io_casted = (DoublePointInformation) io;
                     long int value = DoublePointInformation_getValue((DoublePointInformation) io_casted);
                     QualityDescriptor qd = DoublePointInformation_getQuality((DoublePointInformation) io_casted);
@@ -157,7 +162,8 @@ bool IEC104::m_asduReceivedHandler(void *parameter, int address, CS101_ASDU asdu
             for (int i = 0; i < CS101_ASDU_getNumberOfElements(asdu); i++) {
                 InformationObject io = CS101_ASDU_getElement(asdu, i);
                 long ioa = InformationObject_getObjectAddress(io);
-                if (!(label = IEC104::m_checkExchangedDataLayer(ca, "M_DP_TB_1", ioa)).empty()) {
+                label = IEC104::m_checkExchangedDataLayer(ca, "M_DP_TB_1", ioa);
+                if (!label.empty()) {
                     auto io_casted = (DoublePointWithCP56Time2a) io;
                     long int value = DoublePointInformation_getValue((DoublePointInformation) io_casted);
                     QualityDescriptor qd = DoublePointInformation_getQuality((DoublePointInformation) io_casted);
@@ -178,7 +184,8 @@ bool IEC104::m_asduReceivedHandler(void *parameter, int address, CS101_ASDU asdu
             for (int i = 0; i < CS101_ASDU_getNumberOfElements(asdu); i++) {
                 InformationObject io = CS101_ASDU_getElement(asdu, i);
                 long ioa = InformationObject_getObjectAddress(io);
-                if (!(label = IEC104::m_checkExchangedDataLayer(ca, "M_ST_NA_1", ioa)).empty()) {
+                label = IEC104::m_checkExchangedDataLayer(ca, "M_ST_NA_1", ioa);
+                if (!label.empty()) {
                     auto io_casted = (StepPositionInformation) io;
                     long int value = StepPositionInformation_getValue((StepPositionInformation) io_casted);
                     QualityDescriptor qd = StepPositionInformation_getQuality((StepPositionInformation) io_casted);
@@ -193,7 +200,8 @@ bool IEC104::m_asduReceivedHandler(void *parameter, int address, CS101_ASDU asdu
             for (int i = 0; i < CS101_ASDU_getNumberOfElements(asdu); i++) {
                 InformationObject io = CS101_ASDU_getElement(asdu, i);
                 long ioa = InformationObject_getObjectAddress(io);
-                if (!(label = IEC104::m_checkExchangedDataLayer(ca, "M_ME_NB_1", ioa)).empty()) {
+                label = IEC104::m_checkExchangedDataLayer(ca, "M_ME_NB_1", ioa);
+                if (!label.empty()) {
                     auto io_casted = (StepPositionWithCP56Time2a) io;
                     long int value = StepPositionInformation_getValue((StepPositionInformation) io_casted);
                     QualityDescriptor qd = StepPositionInformation_getQuality((StepPositionInformation) io_casted);
@@ -214,7 +222,8 @@ bool IEC104::m_asduReceivedHandler(void *parameter, int address, CS101_ASDU asdu
             for (int i = 0; i < CS101_ASDU_getNumberOfElements(asdu); i++) {
                 InformationObject io = CS101_ASDU_getElement(asdu, i);
                 long ioa = InformationObject_getObjectAddress(io);
-                if (!(label = IEC104::m_checkExchangedDataLayer(ca, "M_ME_NA_1", ioa)).empty()) {
+                label = IEC104::m_checkExchangedDataLayer(ca, "M_ME_NA_1", ioa);
+                if (!label.empty()) {
                     auto io_casted = (MeasuredValueNormalized) io;
                     float value = MeasuredValueNormalized_getValue((MeasuredValueNormalized) io_casted);
                     QualityDescriptor qd = MeasuredValueNormalized_getQuality((MeasuredValueNormalized) io_casted);
@@ -229,7 +238,8 @@ bool IEC104::m_asduReceivedHandler(void *parameter, int address, CS101_ASDU asdu
             for (int i = 0; i < CS101_ASDU_getNumberOfElements(asdu); i++) {
                 InformationObject io = CS101_ASDU_getElement(asdu, i);
                 long ioa = InformationObject_getObjectAddress(io);
-                if (!(label = IEC104::m_checkExchangedDataLayer(ca, "M_ME_TD_1", ioa)).empty()) {
+                label = IEC104::m_checkExchangedDataLayer(ca, "M_ME_TD_1", ioa);
+                if (!label.empty()) {
                     auto io_casted = (MeasuredValueNormalizedWithCP56Time2a) io;
                     float value = MeasuredValueNormalized_getValue((MeasuredValueNormalized) io_casted);
                     QualityDescriptor qd = MeasuredValueNormalized_getQuality((MeasuredValueNormalized) io_casted);
@@ -250,7 +260,8 @@ bool IEC104::m_asduReceivedHandler(void *parameter, int address, CS101_ASDU asdu
             for (int i = 0; i < CS101_ASDU_getNumberOfElements(asdu); i++) {
                 InformationObject io = CS101_ASDU_getElement(asdu, i);
                 long ioa = InformationObject_getObjectAddress(io);
-                if (!(label = IEC104::m_checkExchangedDataLayer(ca, "M_ME_TE_1", ioa)).empty()) {
+                label = IEC104::m_checkExchangedDataLayer(ca, "M_ME_TE_1", ioa);
+                if (!label.empty()) {
                     auto io_casted = (MeasuredValueScaledWithCP56Time2a) io;
                     long int value = MeasuredValueScaled_getValue((MeasuredValueScaled) io_casted);
                     QualityDescriptor qd = MeasuredValueScaled_getQuality((MeasuredValueScaled) io_casted);
@@ -271,7 +282,8 @@ bool IEC104::m_asduReceivedHandler(void *parameter, int address, CS101_ASDU asdu
             for (int i = 0; i < CS101_ASDU_getNumberOfElements(asdu); i++) {
                 InformationObject io = CS101_ASDU_getElement(asdu, i);
                 long ioa = InformationObject_getObjectAddress(io);
-                if (!(label = IEC104::m_checkExchangedDataLayer(ca, "M_ME_NC_1", ioa)).empty()) {
+                label = IEC104::m_checkExchangedDataLayer(ca, "M_ME_NC_1", ioa);
+                if (!label.empty()) {
                     auto io_casted = (MeasuredValueShort) io;
                     float value = MeasuredValueShort_getValue((MeasuredValueShort) io_casted);
                     QualityDescriptor qd = MeasuredValueShort_getQuality((MeasuredValueShort) io_casted);
@@ -287,7 +299,7 @@ bool IEC104::m_asduReceivedHandler(void *parameter, int address, CS101_ASDU asdu
                 InformationObject io = CS101_ASDU_getElement(asdu, i);
                 long ioa = InformationObject_getObjectAddress(io);
 				label = IEC104::m_checkExchangedDataLayer(ca, "M_ME_TF_1", ioa);
-                if (! label.empty()) {
+                if (!label.empty()) {
                     auto io_casted = (MeasuredValueShortWithCP56Time2a) io;
                     float value = MeasuredValueShort_getValue((MeasuredValueShort) io_casted);
                     QualityDescriptor qd = MeasuredValueShort_getQuality((MeasuredValueShort) io_casted);
@@ -642,7 +654,7 @@ std::string IEC104::m_checkExchangedDataLayer(unsigned int ca, const string& typ
 	else
 		Logger::getLogger()->warn("Unknown IOA (" + to_string(ioa) +") for ASDU " + type_id);
 
-	return "";
+	return to_string(ca)+"_"+type_id+"_"+to_string(ioa);
 }
 
 
