@@ -334,7 +334,7 @@ bool IEC104::m_asduReceivedHandler(void *parameter, int address, CS101_ASDU asdu
             Logger::getLogger()->error("Type of message not supported");
             return false;
     }
-    Logger::getLogger()->info("datapoints size: %d",datapoints.size());
+    Logger::getLogger()->debug("datapoints size: %d",datapoints.size());
     
     if (!datapoints.empty())
         mclient->sendData(asdu, datapoints, label);
@@ -631,7 +631,7 @@ std::string IEC104::m_checkExchangedDataLayer(unsigned int ca, const string& typ
 {
 	bool known_ca = false, known_type_id = false;
 	
-	Logger::getLogger()->warn("Checking " + to_string(ca) + " " + type_id + " " + to_string(ioa));
+	// Logger::getLogger()->warn("Checking " + to_string(ca) + " " + type_id + " " + to_string(ioa));
 	for (auto& element : m_msg_configuration["asdu_list"])
 	{
 		if (m_getConfigValue<unsigned int>(element, "/ca"_json_pointer) == ca)
@@ -647,12 +647,12 @@ std::string IEC104::m_checkExchangedDataLayer(unsigned int ca, const string& typ
 		}
 	}
 
-	if (!known_ca)
-		Logger::getLogger()->warn("Unknown CA (" + to_string(ca) +") for ASDU");
-	else if (!known_type_id)
-		Logger::getLogger()->warn("Unknown type_id (" + type_id +") for ASDU");
-	else
-		Logger::getLogger()->warn("Unknown IOA (" + to_string(ioa) +") for ASDU " + type_id);
+	// if (!known_ca)
+	// 	Logger::getLogger()->warn("Unknown CA (" + to_string(ca) +") for ASDU");
+	// else if (!known_type_id)
+	// 	Logger::getLogger()->warn("Unknown type_id (" + type_id +") for ASDU");
+	// else
+	// 	Logger::getLogger()->warn("Unknown IOA (" + to_string(ioa) +") for ASDU " + type_id);
 
 	return to_string(ca)+"_"+type_id+"_"+to_string(ioa);
 }
@@ -731,14 +731,6 @@ void IEC104Client::sendData(CS101_ASDU asdu, vector<Datapoint*> datapoints, cons
         std::string name = item_dp->getName();
         item_dp->setName("data_object_item");
         Reading reading(name, {header_dp, item_dp});
-        Logger::getLogger()->warn("1111");
-        Logger::getLogger()->warn(dataName);
-        Logger::getLogger()->warn(header_dp->toJSONProperty());
-        Logger::getLogger()->warn(item_dp->toJSONProperty());
-        Logger::getLogger()->warn(reading.toJSON());
-        Logger::getLogger()->warn(reading.getDatapointsJSON());
-        Logger::getLogger()->warn(reading.getAssetName());
-       
         m_iec104->ingest(reading);
     }
 }
